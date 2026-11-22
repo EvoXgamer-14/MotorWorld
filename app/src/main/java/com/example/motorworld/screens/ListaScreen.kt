@@ -19,87 +19,105 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.motorworld.model.Circuito
-import com.example.motorworld.ui.theme.Amarillo
-import com.example.motorworld.ui.theme.Negro
+
 
 @Composable
 fun ListaScreen(
     circuitos: List<Circuito>,
-    onCircuitoClick: (Circuito) -> Unit
-    ){
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text(
-            text= "Resultados:",
-            style= MaterialTheme.typography.titleLarge
+    onCircuitoClick: (Circuito) -> Unit,
+    onCrearCircuito: () -> Unit
+) {
+    Scaffold(
+        floatingActionButton = {
 
-        )
-        LazyColumn {
-            items(circuitos){ circuito ->
+            FloatingActionButton(
+                onClick = onCrearCircuito
+            ) {
+                Text("+")
+            }
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(Negro)
+        }
 
-                ){
-                    Column(
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Resultados:",
+                style = MaterialTheme.typography.titleLarge
+
+            )
+            LazyColumn {
+                items(circuitos) { circuito ->
+
+                    Card(
                         modifier = Modifier
-                            .padding(16.dp)
-                    ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(70.dp)
-                                .clip(CircleShape)
-                                .background(Amarillo),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = circuito.logoUrl
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Text(
-                            text = circuito.nombre,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Distancia: ${circuito.distancia} km"
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
 
-                        )
-                        Text(
-                            text = "Ciudad: ${circuito.ciudad} \n País: ${circuito.pais}"
-                        )
 
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Row(
+                    ) {
+                        Column(
                             modifier = Modifier
-                                .fillMaxSize(),
-                                horizontalArrangement = Arrangement.End
+                                .padding(16.dp)
                         ) {
-                            Button(
-                                onClick = {
-                                    onCircuitoClick(circuito)
-                                }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text("Ver más")
+                                Box(
+                                    modifier = Modifier
+                                        .size(70.dp)
+                                        .clip(CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    AsyncImage(
+                                        model = circuito.logoUrl,
+                                        contentDescription = circuito.nombre,
+                                        modifier = Modifier.fillMaxSize()
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Text(
+                                    text = circuito.nombre,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Distancia: ${circuito.distancia} km"
+
+                            )
+                            Text(
+                                text = "Ciudad: ${circuito.ciudad} \n País: ${circuito.pais}"
+                            )
+
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                Button(
+                                    onClick = {
+                                        onCircuitoClick(circuito)
+                                    }
+                                ) {
+                                    Text("Ver más")
+                                }
                             }
                         }
                     }
